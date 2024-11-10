@@ -1,9 +1,12 @@
 import { Request, Response } from "express"
 import { AdminService } from "./admin.service"
+import pick from "../../../shared/pick"
+import { adminFilterableFields } from "./admin.constant"
 
 const getAllFromDB = async (req: Request, res: Response) => {
     try {
-        const result = await AdminService.getAllFromDB(req.query)
+        const filters = pick(req.query, adminFilterableFields)
+        const result = await AdminService.getAllFromDB(filters)
         res.status(200).json({
             success: true,
             message: "Admin data fetched!",
@@ -12,7 +15,7 @@ const getAllFromDB = async (req: Request, res: Response) => {
     } catch (err) {
         res.status(500).json({
             success: false,
-            message: err?.name  || "Something went wrong",
+            message: err?.name || "Something went wrong",
             error: err
         })
     }
