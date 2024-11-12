@@ -12,15 +12,30 @@ const loginUser = async (payload: {
     })
 
     const isCorrectPassword: boolean = await bcrypt.compare(payload.password, userData.password)
+
+    if(!isCorrectPassword){
+        throw new Error("Password incorrect!")
+    }
     const accessToken = jwt.sign({
         email: userData.email,
         password: userData.password
     }, 'abcdefg', {
         algorithm: "HS256",
-        expiresIn: "15"
+        expiresIn: "5m"
     })
-    console.log({accessToken});
-    return userData
+
+    const refreshToken = jwt.sign({
+        email: userData.email,
+        password: userData.password
+    }, 'abcdefgh', {
+        algorithm: "HS256",
+        expiresIn: "30d"
+    })
+    return {
+        accessToken,
+        refreshToken,
+        needPasswordChange: userData.needPasswordChange
+    }
 }
 
 export const AuthService = {
