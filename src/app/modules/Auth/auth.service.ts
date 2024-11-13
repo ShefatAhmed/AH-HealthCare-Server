@@ -2,6 +2,8 @@ import { UserStatus } from "@prisma/client";
 import { jwtHelpers } from "../../../helpers/jwtHelper";
 import prisma from "../../../shared/prisma";
 import * as bcrypt from "bcrypt"
+import config from "../../../config";
+import { Secret } from "jsonwebtoken";
 
 const loginUser = async (payload: {
     email: string;
@@ -19,9 +21,9 @@ const loginUser = async (payload: {
     if (!isCorrectPassword) {
         throw new Error("Password incorrect!")
     }
-    const accessToken = jwtHelpers.generateToken({ email: payload.email, password: payload.password }, "abcdefgh", "5m")
+    const accessToken = jwtHelpers.generateToken({ email: payload.email, password: payload.password }, config.jwt.jwt_secret as Secret, config.jwt.expires_in as string)
 
-    const refreshToken = jwtHelpers.generateToken({ email: payload.email, password: payload.password }, "abcdefghijklmnop", "30d")
+    const refreshToken = jwtHelpers.generateToken({ email: payload.email, password: payload.password }, config.jwt.refresh_token_secret as Secret, config.jwt.refresh_token_expires_in as string)
     return {
         accessToken,
         refreshToken,
@@ -42,7 +44,7 @@ const refreshToken = async (token: string) => {
             status: UserStatus.ACTIVE
         }
     })
-    const accessToken = jwtHelpers.generateToken({ email: userData.email, password: userData.password }, "abcdefgh", "5m")
+    const accessToken = jwtHelpers.generateToken({ email: userData.email, password: userData.password }, config.jwt.jwt_secret as Secret, config.jwt.expires_in as string)
     return {
         accessToken,
         needPasswordChange: userData.needPasswordChange
