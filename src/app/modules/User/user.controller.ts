@@ -14,7 +14,7 @@ const createAdmin = catchAsync(async (req: Request, res: Response, next?: unknow
     })
 })
 
-const createDoctor = async (req: Request, res: Response, next?: unknown) => {
+const createDoctor = catchAsync(async (req: Request, res: Response, next?: unknown) => {
     const result = await userService.createDoctor(req);
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -22,9 +22,20 @@ const createDoctor = async (req: Request, res: Response, next?: unknown) => {
         message: "Doctor created successfully!",
         data: result
     })
-}
+})
+
+const createPatient = catchAsync(async (req: Request, res: Response, next?: unknown) => {
+    const result = await userService.createPatient(req);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Patient created successfully!",
+        data: result
+    })
+})
 
 export const userController = {
     createAdmin,
-    createDoctor
+    createDoctor,
+    createPatient
 }
