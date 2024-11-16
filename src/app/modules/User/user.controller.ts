@@ -5,6 +5,7 @@ import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
 import { UserFilterableFields } from "./user.constants";
 import pick from "../../../shared/pick";
+import { IAuthUser } from "../../interfaces/common";
 
 const createAdmin = catchAsync(async (req: Request, res: Response, next?: unknown) => {
     const result = await userService.createAdmin(req);
@@ -60,9 +61,9 @@ const changeProfileStatus = catchAsync(async (req: Request, res: Response) => {
     })
 });
 
-const getMyProfile = catchAsync(async (req: Request, res: Response) => {
+const getMyProfile = catchAsync(async (req: Request & { user?: IAuthUser }, res: Response) => {
     const user = req.user;
-    const result = await userService.getMyProfile(user)
+    const result = await userService.getMyProfile(user as IAuthUser)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -71,9 +72,9 @@ const getMyProfile = catchAsync(async (req: Request, res: Response) => {
     })
 })
 
-const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
+const updateMyProfile = catchAsync(async (req: Request & { user?: IAuthUser }, res: Response) => {
     const user = req.user;
-    const result = await userService.updateMyProfile(user, req)
+    const result = await userService.updateMyProfile(user as IAuthUser, req)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
