@@ -2,6 +2,7 @@ import { Request } from "express"
 import { fileUploader } from "../../../helpers/fileUploader"
 import prisma from "../../../shared/prisma";
 import { IFile } from "../../interfaces/file";
+import { Specialties } from "@prisma/client";
 
 const insertIntoDB = async (req: Request) => {
     const file = req.file as IFile
@@ -16,6 +17,11 @@ const insertIntoDB = async (req: Request) => {
     return result
 }
 
+const getAllFromDB = async (): Promise<Specialties[]> => {
+    return await prisma.specialties.findMany();
+}
+
 export const SpecialtiesServices = {
-    insertIntoDB
+    insertIntoDB,
+    getAllFromDB
 }
