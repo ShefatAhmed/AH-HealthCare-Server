@@ -4,3 +4,8 @@ export type ISchedule = {
     startTime: string,
     endTime: string
 }
+
+export type IFillterRequest = {
+    startDate?: string | undefined;
+    endDate?: string | undefined;
+}
