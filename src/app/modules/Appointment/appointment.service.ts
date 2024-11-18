@@ -48,6 +48,15 @@ const createAppointment = async (user: IAuthUser, payload: any) => {
                 appointmentId: appointmentData.id
             }
         })
+        const today = new Date();
+        const transactionId = "Ah-HealthCare-" + today.getFullYear() + "-" + today.getMonth() + "-" + today.getDay() + "-" + today.getHours() + "-" + today.getMinutes();
+        await tx.payment.create({
+            data: {
+                appointmentId: appointmentData.id,
+                amount: doctorData.appointmentFee,
+                transactionId
+            }
+        })
         return appointmentData;
     })
 
