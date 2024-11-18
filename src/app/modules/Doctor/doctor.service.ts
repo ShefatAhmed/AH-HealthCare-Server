@@ -64,7 +64,7 @@ const getAllFromDB = async (
         take: limit,
         orderBy: options.sortBy && options.sortOrder
             ? { [options.sortBy]: options.sortOrder }
-            : { averageRating: 'desc' },
+            : { createdAt: 'desc' },
         include: {
             doctorSpecialties: {
                 include: {
