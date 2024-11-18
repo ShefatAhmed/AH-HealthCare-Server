@@ -5,6 +5,7 @@ import { Request, Response } from "express";
 import { AppointmentServices } from "./appointment.service";
 import { IAuthUser } from "../../interfaces/common";
 import pick from "../../../shared/pick";
+import { appointmentFilterableFields } from "./appointment.constant";
 
 const getMyAppointment = catchAsync(async (req: Request & { user?: IAuthUser }, res: Response) => {
     const user = req.user as IAuthUser;
@@ -30,7 +31,21 @@ const createAppointment = catchAsync(async (req: Request & { user?: IAuthUser },
     })
 })
 
+const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
+    const filters = pick(req.query, appointmentFilterableFields)
+    const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
+    const result = await AppointmentServices.getAllFromDB(filters, options);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Appointment retrieval successfully',
+        meta: result.meta,
+        data: result.data,
+    });
+});
+
 export const AppointmentController = {
     createAppointment,
-    getMyAppointment
+    getMyAppointment,
+    getAllFromDB
 } 
