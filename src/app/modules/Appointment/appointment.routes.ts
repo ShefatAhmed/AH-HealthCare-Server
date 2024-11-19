@@ -16,5 +16,6 @@ router.get("/my-appointment", auth(UserRole.PATIENT, UserRole.DOCTOR), Appointme
 
 router.post("/", auth(UserRole.PATIENT), validateRequest(AppointmentValidation.createAppointment), AppointmentController.createAppointment)
 
+router.patch("/status/:id", AppointmentController.changeAppointmentStatus)
 
 export const AppointmentRoutes = router;
