@@ -57,9 +57,22 @@ const changeAppointmentStatus = catchAsync(async (req: Request & { user?: IAuthU
     });
 });
 
+const cancelUnpaidAppointment = catchAsync(async (req: Request, res: Response) => {
+    const result = await AppointmentServices.cancelUnpaidAppointment();
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Appointment canceled successfully',
+        data: result,
+    });
+});
+
+
+
 export const AppointmentController = {
     createAppointment,
     getMyAppointment,
     getAllFromDB,
-    changeAppointmentStatus
+    changeAppointmentStatus,
+    cancelUnpaidAppointment
 } 
