@@ -2,8 +2,9 @@ import axios from "axios";
 import config from "../../../config";
 import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
+import { IPaymentData } from "./ssl.interface";
 
-const initPayment = async (paymentData: any) => {
+const initPayment = async (paymentData: IPaymentData) => {
     try {
         const data = {
             store_id: config.ssl.storeId,
@@ -27,7 +28,7 @@ const initPayment = async (paymentData: any) => {
             cus_state: 'Dhaka',
             cus_postcode: '1000',
             cus_country: 'Bangladesh',
-            cus_phone: paymentData.contactNumber,
+            cus_phone: paymentData.phoneNumber,
             cus_fax: '01711111111',
             ship_name: 'N/A',
             ship_add1: 'N/A',
