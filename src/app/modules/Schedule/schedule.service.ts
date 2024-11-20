@@ -6,6 +6,11 @@ import { IPaginationOptions } from "../../interfaces/pagination";
 import { paginationHelper } from "../../../helpers/paginationHelper";
 import { IAuthUser } from "../../interfaces/common";
 
+const convertDateTime = async (date: Date) => {
+    const offset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() + offset);
+}
+
 const getAllFromDB = async (
     filters: IFillterRequest,
     options: IPaginationOptions,
@@ -120,9 +125,12 @@ const insertIntoDB = async (payload: ISchedule): Promise<Schedule[]> => {
         );
 
         while (startDateTime < endDateTime) {
+            const s = await convertDateTime(startDateTime);
+            const e = await convertDateTime(addMinutes(startDateTime, intervelTime))
+
             const scheduleData = {
-                startDateTime: startDateTime,
-                endDateTime: addMinutes(startDateTime, intervelTime)
+                startDateTime: s,
+                endDateTime: e
             }
 
             const existingSchedule = await prisma.schedule.findFirst({
